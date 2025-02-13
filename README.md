@@ -8,4 +8,6 @@ I am sharing this in case anyone finds benefit in reading it as part of their ow
 
 postgres_notes.txt covers Postgres setup.  I did that first.
 
-python_notes.txt covers what I did with Python.
+python_notes.txt covers what I did with Python.  I used langchain and other Python libraries to make things work.  I probably did not use langchain the normal way.
+
+For Java, I am focusing on using the Ollama REST API.  I have read it is identical to the OpenAI API, so hopefully this will be useful for real work.
