@@ -1,0 +1,39 @@
+
+I have been learning how to use Python, Ollama and Postgres to work with LLMs, build RAG applications, use agents and tools etc.  I am writing what I do as I go, for my own future reference and in case anyone else is interested.  I do most of my work in Java, so you will see some basic Python refreshing and learning happening at the same time.
+
+My setup:
+ - Windows 11, running on an AMD Ryzen 5 5600GT with no dedicated graphics card and 64 GB of RAM (a mid-range computer, but weak on graphics and with a silly amount of RAM)
+ - Ollama, downloaded from https://ollama.com/
+ - PostgresSQL Community v16, downloaded from https://www.postgresql.org/download/windows/
+ - Python 3, from https://www.python.org/
+ - VS Code, from https://code.visualstudio.com/
+
+Some notes on how I set up Postgres, especially the pgvector extension, can be found in postgres_notes.txt.
+
+I set up my sandbox in C:\Coding\ws_ai - the contents are in this repository, except for database.ini, which holds my credentials and you will have to create with your credentials.
+
+To run the Python virtual environment, I had to set the execution policy first.  I do this every time, in the console, with scope that only lasts for this one time.
+    Set-ExecutionPolicy -ExecutionPolicy AllSigned -Scope Process
+
+I ran these commands to set up a Python virtual environment, to make managing dependencies easier.
+    python -m venv C:\Coding\ws_ai\sandbox\venv (to create)
+    .\venv\Scripts\activate (to activate the environment, run from C:\Coding\ws_ai\sandbox)
+
+I use "pip install" to install libraries that I use, and "pip freeze > requirements.txt" to capture them.  To install them all at once, run:
+    pip install -r requirements.txt
+
+I wrote postgres_demo.py to make sure I could use my Postgres setup, and to refresh on how to do basic database interactions with Python.
+
+I get the impression langchain is meant to be used as one eye-pleasing chain of calls.  I may not get to that point, probably leaving it in chunks to make debugging and comprehension easier.  My first script is langchain_embed_single_file.py, which chunks up a large text file, creates embeddings, and stores the content in the database for future queries.
+
+Notes:
+ - so far, it seems that small chunks created just using EOLs and spaces to break up content work better than much larger chunks with attempts at logical divids like chapters
+ - filtering in the query and then sorting so that chunks that were adjacent in the source material are adjacent in the context yields better results
+
+Questions for another day:
+a) figure out how to get the token count for a string of text
+b) see if embedding results include token count
+c) see if prompt results include token count
+d) try with Java and REST calls
+
+

@@ -1,0 +1,71 @@
+
+I installed PostgresSQL v16 because v17 is not yet supported by pgvector
+
+The batch file that runs the shell, runpsql.bat, gave me a warning when I can it about varying character encodings, so I added this to the batch file near the top to fix it:
+    chcp 1252
+(I had to run notepad as admin to edit it)
+
+pgvector pre-built binaries for windows:
+https://github.com/andreiramani/pgvector_pgsql_windows
+
+to set up pgvector, I downloaded the ZIP file from the above URL, unzipped it, and copied the files over as the read me said
+
+the readme then had two commands that I had to run, but they only worked when I added the missing semicolons:
+    CREATE EXTENSION vector;
+    SELECT extname,extrelocatable,extversion FROM pg_extension where extname='vector';
+
+I used pgAdmin 4 (the gui) to create an account called db2admin will full access to use in the code below.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Shell Commands: https://www.postgresql.org/docs/current/app-psql.html
+\db lists tablespaces
+\dn lists schemas
+\dp lists tables
+
+adding a + to these gets more information returned
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+to make table spaces work, I had to do the following; when I missed the "connect" step midway, it looked like things were not working
+
+    to create a tablespace:
+    CREATE TABLESPACE andrew_tablespace LOCATION 'd:\Coding\postgres_andrew_tablespace';
+
+    to create a database:
+    CREATE DATABASE andrewdb TABLESPACE andrew_tablespace;
+
+    connect to that database:
+    \connect andrewdb;
+
+    create schema in connected database
+    create schema andrew;
+
+then create a table in andrew schema
+
+create table andrew.people (
+    id serial primary key,
+    name varchar(255) not null,
+    email varchar(255)
+);
+
+to create a table with a vector, to validate that this works:
+(the '3' makes this a 3D vector ... pretty damn small)
+
+CREATE TABLE andrew.items (
+  id SERIAL PRIMARY KEY,
+  embedding vector(3)
+);
+
+drop table andrew.people
+drop table andrew.items
+
+here is a table to put embeddings in, with columns to hold the source (e.g. filename), content, and the embedding vector
+(768 happens to be the number of dimensions I see coming out of embeddings from nomic-embed-text)
+
+create table andrew.embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(768)
+);
