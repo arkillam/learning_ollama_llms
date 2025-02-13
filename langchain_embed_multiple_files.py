@@ -78,6 +78,7 @@ embedder = OllamaEmbeddings(model=embeddingModel, base_url='http://localhost:114
 text_splitter = RecursiveCharacterTextSplitter(separators=separators, is_separator_regex=True,chunk_size = chunkSize, chunk_overlap  = overlapAmount)
 
 # list of files to embed; I find putting them in an array is a bit easier to read
+# (I have a set of D&D rules from the 1990s I bought in text form ... useful because I can ask questions from a complex set of rules and know if I received correct answers)
 filesToEmbed = [
     'D:\\Files\\RPG Books\\ADnD 2E RTFs\\complete_wizard.txt',
     'D:\\Files\\RPG Books\\ADnD 2E RTFs\\dmg.txt',

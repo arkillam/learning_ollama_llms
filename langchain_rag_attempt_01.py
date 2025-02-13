@@ -10,14 +10,17 @@ from useful_stuff import logger
 
 # trying to match character limits to context windows ... without yet having a way to calculate token sizes
 
-#modelName = "llama3.1:latest"
-#characterLimit = 120000
-
 # used to match the question to the available data
 embeddingModel = 'nomic-embed-text'
 
-modelName = "mistral-nemo:latest"
-characterLimit = 120000
+modelName = "mistral-nemo:latest" # has 128k context length
+charLimit = 120000
+#modelName = "llama3.1:latest" # has 128k context length
+#charLimit = 120000
+
+# note - gemma seems to small to do what I ask; it fails to answer questions (or I am using it wrong ...)
+#modelName = "gemma:2b" # has 8192 context length
+#charLimit = 8000
 
 question = input("What is your question? ")
 print (question)
@@ -47,11 +50,12 @@ logger("{} rows returned".format(cur.rowcount))
 # for matches > 0.60 we capture their text and note their source
 text = ""
 sources = {''} # this is a set, should ensure sources are not duplicated
+logger("character limit is " + str(charLimit))
 for record in cur:
     #print(str(record[1]) + " " + str(record[0]))
     text = text + "\n\n" + record[2]
     sources.add(record[1])
-    if (len(text) > 120000):
+    if (len(text) > charLimit):
         logger("maxed out content at {} characters".format(len(text)))
         break
 
@@ -68,6 +72,8 @@ if (len(sources) < 1):
 logger("source content size:  {} characters".format(len(text)))
 
 # create the prompt template, setting it up for RAG (answer the question based on the info found in the database)
+# note: I often see the model respond with information from it, not from the passed-in context, so this is not working well
+# happens with mistral-nemo, for example
 prompt_template = ChatPromptTemplate([
     ("user", """Answer the question based only on the following context:
 
@@ -91,8 +97,10 @@ logger ('created model')
 
 # invoke the model (this can take a long time)
 logger ('invoking ...')
+# https://python.langchain.com/api_reference/core/messages/langchain_core.messages.base.BaseMessage.html#langchain_core.messages.base.BaseMessage
 message = model.invoke(prompt_value)
 logger ('done')
 
 # write out the result
 print (message.content)
+print (message.response_metadata)
