@@ -11,7 +11,7 @@ public static void main(String[] args) {
     try {
 
 	logger.info("Started");
-
+	
 	logger.info("Completed");
 
     } catch (Exception e) {
