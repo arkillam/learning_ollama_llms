@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} 
+				- %msg%n" /> -->
+			<!-- I replaced %logger{36} - which displays the name of the logger - 
+				with the name of the class (without its package) and the name of the method -->
+			<PatternLayout
+				pattern="[%t] %-5level %C{1} %M - %msg%n" />
+
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
