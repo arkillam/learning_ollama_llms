@@ -30,8 +30,11 @@ Notes:
  - so far, it seems that small chunks created just using EOLs and spaces to break up content work better than much larger chunks with attempts at logical divids like chapters
  - filtering in the query and then sorting so that chunks that were adjacent in the source material are adjacent in the context yields better results
  - my initial impressions of deepseek is that using it to generate embeddings and then use those for semantic search of chunks ... does not work well at all
+ - I tried two PDFs, and for both I found the text extracted was messy, with lots of added spaces around words etc.  I am not going to try more PDF extractions for a while.
+
 Questions for another day:
 a) figure out how to get the token count for a string of text
 b) see if embedding results include token count
 c) try with Java and REST calls
 d) update first two rag attempt scripts to have table_name variable as there is in the third
+
