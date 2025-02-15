@@ -67,5 +67,19 @@ create table andrew.embeddings (
     id serial primary key,
     source text,
     content text,
+    embedding vector(1536)
+);
+
+create table andrew.deepseek_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1536)
+);
+
+create table andrew.nomic_embeddings (
+    id serial primary key,
+    source text,
+    content text,
     embedding vector(768)
 );
