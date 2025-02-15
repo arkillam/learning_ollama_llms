@@ -1,5 +1,6 @@
 
 import psycopg2
+import threading
 import useful_stuff
 
 from datetime import datetime
@@ -7,6 +8,8 @@ from langchain_community.document_loaders import TextLoader
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from useful_stuff import logger
+
+# note: not sure how well this works; I tried it, but it was taking so long to run I killed the processes and tried something else
 
 # using nomic-embed-text to generate embeddings; it has a 8192 context-length (https://www.nomic.ai/blog/posts/nomic-embed-text-v1)
 # produces vectors of 768 dimensions
@@ -18,8 +21,8 @@ from useful_stuff import logger
 # using deepseek-r1:1.5b to generate embeddings; it has a 32k context-length (https://ollama.com/ishumilin/deepseek-r1-coder-tools:1.5b)
 # produces vectors of 1536 dimensions
 embeddingModel = 'deepseek-r1:1.5b'
-chunkSize = 500
-overlapAmount = 50
+chunkSize = 200
+overlapAmount = 20
 
 # the separators used to break text up into chunks
 #separators = ['\n\n','\n',' ',''] # this one is the default
@@ -87,23 +90,31 @@ embedder = OllamaEmbeddings(model=embeddingModel, base_url='http://localhost:114
 #text_splitter = RecursiveCharacterTextSplitter(separators=separators, is_separator_regex=True,chunk_size = chunkSize, chunk_overlap  = overlapAmount)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size = chunkSize, chunk_overlap  = overlapAmount)
 
-# list of files to embed; I find putting them in an array is a bit easier to read
-# (I have a set of D&D rules from the 1990s I bought in text form ... useful because I can ask questions from a complex set of rules and know if I received correct answers)
-filesToEmbed = [
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\complete_fighter.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\complete_thief.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\complete_wizard.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\dmg.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\monster_manual.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\phb.txt',    
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\po_combat_tactics.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\po_skills_powers.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\po_spells_magic.txt',
-    'D:\\Files\\RPG Books\\ADnD 2E RTFs\\tom.txt'
-]
+t1 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\complete_wizard.txt', conn, embedder, text_splitter))
+t2 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\dmg.txt', conn, embedder, text_splitter))
+t3 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\monster_manual.txt', conn, embedder, text_splitter))
+t4 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\phb.txt', conn, embedder, text_splitter))
+t5 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\po_skills_powers.txt', conn, embedder, text_splitter))
+t6 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\po_spells_magic.txt', conn, embedder, text_splitter))
+t7 = threading.Thread(target=embedTextFile,args=('D:\\Files\\RPG Books\\ADnD 2E RTFs\\tom.txt', conn, embedder, text_splitter))
 
-for f in filesToEmbed:
-    embedTextFile(filename=f,conn=conn,embedder=embedder,text_splitter=text_splitter)
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+t5.start()
+t6.start()
+t7.start()
+
+t1.join()
+t2.join()
+t3.join()
+t4.join()
+t5.join()
+t6.join()
+t7.join()
+
+logger('all threads complete')
 
 conn.close()
 logger ('closed database connection')
