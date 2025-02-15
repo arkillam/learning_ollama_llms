@@ -21,7 +21,7 @@ table_name = 'andrew.nomic_embeddings'
 
 # note - gemma seems to small to do what I ask; it fails to answer questions (or I am using it wrong ...)
 #modelName = "gemma:2b" # has 8192 context length
-#charLimit = 8000
+#charLimit = 5500
 
 #modelName = "llama3.1:latest" # has 128k context length
 #charLimit = 120000
@@ -34,13 +34,13 @@ table_name = 'andrew.nomic_embeddings'
 
 # note: a few quick tests made me think phi3.5 is superior to llama3.2:3b for my purposes (it was pretty fast to respond though)
 # https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/MODEL_CARD.md
-#modelName = "llama3.2:3b" # has 128k context length
-#charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
-modelName = "llama3.2:1b" # has 128k context length
+modelName = "llama3.2:3b" # has 128k context length
 charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
+#modelName = "llama3.2:1b" # has 128k context length
+#charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
 
 # https://huggingface.co/blog/gemma2
-#modelName = "gemma2:9b" # has 8192 token context length, so I am thinking that's 32k of characters roughly, and allowing 2/3 of that as the context
+#modelName = "gemma2:2b" # has 8192 token context length, so I am thinking that's 32k of characters roughly, and allowing 2/3 of that as the context
 #charLimit = 20000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
 
 question = input("What is your question? ")
