@@ -17,6 +17,7 @@ Notes:
  - querying and then sorting chunks so that chunks that were adjacent in the source material are adjacent in the context yields better results
  - my initial impression of deepseek is that using it to generate embeddings and then use those for semantic search of chunks ... does not work well at all
  - I tried two PDFs, and for both I found the text extracted was messy, with lots of added spaces around words etc.  I am not going to try more PDF extractions for a while.
+ - I mistakenly thought an LLM would use a tool once it had it bound, and wasted time trying to fix this when it was not working.  In fact, the LLM returns how to invoke the tool, which I then had to do as my next step.
 
 Questions for another day (my todo list):
 a) figure out how to get the token count for a string of text

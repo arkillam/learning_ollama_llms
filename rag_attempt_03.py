@@ -8,16 +8,17 @@ from langchain_ollama import ChatOllama
 from langchain_ollama import OllamaEmbeddings
 from useful_stuff import logger
 
-# my second attempt was focused on fixing up the context in the prompt; in the first attempt, answers were clearly coming back based on data outside the RAG input
+# this third attempt is generally aimed at getting better results, fiddling with context length, chunk size, which models to use for embedding and generating answers
 
-# trying to match character limits to context windows ... without yet having a way to calculate token sizes
+# started with filling whole context window with chunks, now realize have to leave room for responses, so aiming to fill 2/3 of content length with RAG inputs
 
 # used to match the question to the available data
 embedding_model = 'nomic-embed-text'
 table_name = 'andrew.nomic_embeddings'
 #embedding_model = 'deepseek-r1:1.5b'
 #table_name = 'andrew.deepseek_embeddings'
-
+#embedding_model = 'granite3-moe:1b'
+#table_name = "andrew.granite_embeddings1024"
 
 # note - gemma seems to small to do what I ask; it fails to answer questions (or I am using it wrong ...)
 #modelName = "gemma:2b" # has 8192 context length
@@ -32,12 +33,20 @@ table_name = 'andrew.nomic_embeddings'
 #modelName = "phi3.5:latest" # has 128k context length
 #charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
 
+# I find granite to be a speedy model to run, a bit terse in term of the amount of text returned
+#modelName = "granite3.1-dense:2b" # has 128k context length
+#modelName = "granite3.1-dense" # (8b) has 128k context length
+#charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
+
 # note: a few quick tests made me think phi3.5 is superior to llama3.2:3b for my purposes (it was pretty fast to respond though)
 # https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/MODEL_CARD.md
-modelName = "llama3.2:3b" # has 128k context length
-charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
+#modelName = "llama3.2:3b" # has 128k context length
+#charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
 #modelName = "llama3.2:1b" # has 128k context length
 #charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
+
+modelName = "qwen2.5:3b" # has 128k context length, 7b was damn slow
+charLimit = 80000 # using 2/3 of the context window for context, to leave 1/3 for the generated answer
 
 # https://huggingface.co/blog/gemma2
 #modelName = "gemma2:2b" # has 8192 token context length, so I am thinking that's 32k of characters roughly, and allowing 2/3 of that as the context
@@ -68,7 +77,7 @@ minimum_value = 1.00 # this is a perfect match - very high starting level that w
 matches = 0
 # we will take one match at a high similarity, or wait until we find five matches
 while ((minimum_value >= 0.7 and matches == 0) or (matches < 5)):
-    minimum_value = minimum_value - 0.05
+    minimum_value = minimum_value - 0.03 # used to be 0.05, but wanted smaller steps to avoid the final leap grabbing a lot of chunks
     findClosestQuery = "select id, source, content from {} where (1.0 - (embedding <=> '{}')) > {} order by source, id".format(table_name, question_vector, minimum_value)
     cur.execute(findClosestQuery)
     matches = cur.rowcount
@@ -143,3 +152,5 @@ print (message.response_metadata)
 print ("Sources:")
 for source in sources:
     print (" - " + source.split('\\')[-1])
+
+logger("done")

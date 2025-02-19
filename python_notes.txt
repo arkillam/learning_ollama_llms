@@ -41,3 +41,8 @@ I have three of these so far.  I learned about context length (sometimes calling
 Agents & Tools:
 
 "tools_01.py" does what it says in the comments at the top of that file.  Probably best just to read them there.
+
+Here is a list of provided integration tools for langchain:  https://python.langchain.com/docs/integrations/tools/
+
+"search_duckduckgo.py" shows two tools for searching Duck Duck Go (only one of them seems useful to me, but I may be missing the value of the other option)
+

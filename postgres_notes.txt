@@ -83,3 +83,24 @@ create table andrew.nomic_embeddings (
     content text,
     embedding vector(768)
 );
+
+create table andrew.granite_embeddings1536 (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1536)
+);
+
+create table andrew.granite_embeddings1024 (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1024)
+);
+
+create table andrew.pdf_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(768)
+);
