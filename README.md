@@ -23,8 +23,7 @@ Questions for another day (my todo list):
 a) figure out how to get the token count for a string of text
 b) see if embedding results include token count
 c) try with Java and REST calls
-d) update first two rag attempt scripts to have table_name variable as there is in the third
-e) look at granite3-moe, which is for "low latency" use
+d) add phi4 and deepseek models to the list I use
 
 List of things I want to learn (pulled from the list of what Granite 3.1 does):
  - Summarization

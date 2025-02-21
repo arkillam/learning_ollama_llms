@@ -32,11 +32,19 @@ I wrote postgres_demo.py to make sure I had a working Postgres database and coul
 
 Embeddings:
 
-I did this first.  The "embed_" scripts use langchain, but are probably not great examples of the right way to use langchain (again, did not take a course in that first).  I wrot the single file one first, then the multiple files using nomic.  I am happy with these.  I found that deepseek embeddings did not lead to good search matches, and did not finish the threaded embedding script - one at a time seems to tax my PC's CPU enough.  Embedding a PDF worked, but the content was scattered, with weird spaces breaking up words, so I stopped working with PDFs quickly, though the code does work.
+Different embedding combinations (model, chunk size, overlap size, and the tables to store the embeddings in) are provided via useful_stuff.py's def embedding_setups().  You can see how I use it in embed_multiple_files.py.
 
-RAG Attempts 1-3:
+I tried generating embeddings with various general-purpose models, and found it painfully slow. I am not only using "embedding" models from Ollama's website.  You can see my notes on each in the comments at the top of embed_multiple_files.py.
 
-I have three of these so far.  I learned about context length (sometimes calling it context window), limiting what I passed in to fit in that space, and how to find chunks to generate good responses.  I tested lots of models, lots of chunk sizes (re-running embed_multiple_files_nomic.py many times), and ended up with a attempt #3 working well enough that I am satisfied with the results for now.  I should probably learn how to use langchain as it is intended, with calls chained, but am pausing to work on this to learn about agents and tools.
+Some embedding models break if I pass in chunk sizes that are too large.
+
+I have various model and chunk size setups now, to test for efficacy with my RAG application.
+
+RAG Attempts 1-4:
+
+I have four of these so far.  I learned about context length (sometimes calling it context window), limiting what I passed in to fit in that space, and how to find chunks to generate good responses.  I tested lots of models, lots of chunk sizes (re-running embed_multiple_files_nomic.py many times), and ended up with a attempt #3 working well enough that I am satisfied with the results for now.  I should probably learn how to use langchain as it is intended, with calls chained, but am pausing to work on this to learn about agents and tools.
+
+The fourth attempt includes pulling embedding and generative model information from lists provided by functions in useful_stuff.py.  This makes swapping models much easier.
 
 Agents & Tools:
 

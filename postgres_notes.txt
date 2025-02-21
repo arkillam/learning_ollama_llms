@@ -60,8 +60,49 @@ CREATE TABLE andrew.items (
 drop table andrew.people
 drop table andrew.items
 
-here is a table to put embeddings in, with columns to hold the source (e.g. filename), content, and the embedding vector
-(768 happens to be the number of dimensions I see coming out of embeddings from nomic-embed-text)
+below are tables to put embeddings in; they match up with model/table mappings in useful_stuff.py
+
+create table andrew.arctic_small_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1024)
+);
+
+create table andrew.arctic_medium_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1024)
+);
+
+create table andrew.arctic_large_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(1024)
+);
+
+create table andrew.granite_small_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(384)
+);
+
+create table andrew.nomic_medium_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(768)
+);
+
+create table andrew.nomic_large_embeddings (
+    id serial primary key,
+    source text,
+    content text,
+    embedding vector(768)
+);
 
 create table andrew.embeddings (
     id serial primary key,
@@ -75,13 +116,6 @@ create table andrew.deepseek_embeddings (
     source text,
     content text,
     embedding vector(1536)
-);
-
-create table andrew.nomic_embeddings (
-    id serial primary key,
-    source text,
-    content text,
-    embedding vector(768)
 );
 
 create table andrew.granite_embeddings1536 (
